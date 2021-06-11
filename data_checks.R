@@ -1,4 +1,3 @@
-
 # checks
 checks <- function(data) {
   # cases
