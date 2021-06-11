@@ -145,7 +145,7 @@ province_data <-
     date = report_date,
     YYYYMMDD = report_date,
     UNKNOWN = total - (EC + FS + GP + KZN + LP + MP + NW + NC + WC),
-    source = "sacoronavirus_scaper"
+    source = "gis_nicd_scraper"
   )
 
 data_cases <-
