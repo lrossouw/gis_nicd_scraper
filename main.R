@@ -230,9 +230,6 @@ format_dates <- function(data) {
 # Pull latest changes on covid19za
 git_pull(repo_path, repo, repo_branch)
 
-# stop for no
-stopifnot(TRUE == FALSE)
-
 # write output
 write_csv(
   format_dates(data_cases),
