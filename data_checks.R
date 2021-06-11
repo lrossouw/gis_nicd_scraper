@@ -11,23 +11,35 @@ checks <- function(data) {
                   !is.na(data[prior_row, c(3:11, 13)])]
 
   # different
-  stopifnot(any(data[last_row, cols_check] > data[prior_row, cols_check]))
+  if (all(data[last_row, cols_check] == data[prior_row, cols_check])) {
+    return(FALSE)
+  }
 
   # increasing
-  stopifnot(data[last_row, cols_check] >= data[prior_row, cols_check])
+  if (any(data[last_row, cols_check] < data[prior_row, cols_check])) {
+    return(FALSE)
+  }
 
   # increasing < 10%
-  stopifnot(data[last_row, cols_check] / data[prior_row, cols_check] < 1.1)
+  if (any(data[last_row, cols_check] / data[prior_row, cols_check] > 1.1)) {
+    return(FALSE)
+  }
 
   # totals match
   if (any_nuls) {
-    stopifnot(is.na(data[last_row, 13]))
+    if (!is.na(data[last_row, 13])) {
+      return(FALSE)
+    }
   } else {
-    stopifnot(sum(data[last_row, c(3:12)]) == data[last_row, 13])
+    if (!sum(data[last_row, c(3:12)]) == data[last_row, 13]) {
+      return(FALSE)
+    }
   }
 
   # not too much unknown
-  stopifnot(sum(data[last_row, "UNKNOWN"]) < 100)
+  if (sum(data[last_row, "UNKNOWN"]) > 100) {
+    return(FALSE)
+  }
 
   # return true
   return(TRUE)
@@ -45,18 +57,25 @@ checks_testing <- function(data) {
                  !is.na(data[prior_row, c(3:6, 10)])]
 
   # different
-  stopifnot(any(data[last_row, cols_check] > data[prior_row, cols_check]))
+  if (all(data[last_row, cols_check] == data[prior_row, cols_check])) {
+    return(FALSE)
+  }
 
   # increasing
-  stopifnot(data[last_row, cols_check] >= data[prior_row, cols_check])
+  if (any(data[last_row, cols_check] < data[prior_row, cols_check])) {
+    return(FALSE)
+  }
 
   # increasing < 10%
-  stopifnot(data[last_row, cols_check] / data[prior_row, cols_check] < 1.1)
+  if (any(data[last_row, cols_check] / data[prior_row, cols_check] > 1.1)) {
+    return(FALSE)
+  }
 
   # totals match
-  stopifnot(sum(data[last_row, c(4:5)]) == data[last_row, 3])
+  if (!sum(data[last_row, c(4:5)]) == data[last_row, 3]) {
+    return(FALSE)
+  }
 
   # return true
   return(TRUE)
 }
-

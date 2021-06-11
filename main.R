@@ -213,12 +213,7 @@ data_testing <-
 
 source("data_checks.R", echo = TRUE)
 
-# run checks
-stopifnot(checks(data_cases))
-stopifnot(checks(data_deaths))
-stopifnot(checks(data_recoveries))
-stopifnot(checks_testing(data_testing))
-
+# format dates function
 format_dates <- function(data) {
   return(data %>%
            mutate(
@@ -230,38 +225,57 @@ format_dates <- function(data) {
 # Pull latest changes on covid19za
 git_pull(repo_path, repo, repo_branch)
 
-# write output
-write_csv(
-  format_dates(data_cases),
-  file = file_cases,
-  quote = FALSE,
-  na = "",
-  col_names = TRUE
-)
+# write output (if checks passed)
+if (checks(data_cases)) {
+  print("Write data_cases...")
+  write_csv(
+    format_dates(data_cases),
+    file = file_cases,
+    quote = FALSE,
+    na = "",
+    col_names = TRUE
+  )
+} else {
+  print("Error in data_cases.")
+}
+if (checks(data_deaths)) {
+  print("Write data_deaths...")
+  write_csv(
+    format_dates(data_deaths),
+    file = file_deaths,
+    quote = FALSE,
+    na = "",
+    col_names = TRUE
+  )
+} else {
+  print("Error in data_deaths.")
+}
+if (checks(data_recoveries)) {
+  print("Write data_recoveries...")
+  write_csv(
+    format_dates(data_recoveries),
+    file = file_recoveries,
+    quote = FALSE,
+    na = "",
+    col_names = TRUE
+  )
+} else {
+  print("Error in data_recoveries.")
+}
 
-write_csv(
-  format_dates(data_deaths),
-  file = file_deaths,
-  quote = FALSE,
-  na = "",
-  col_names = TRUE
-)
+if (checks_testing(data_testing)) {
+  print("Write data_testing...")
+  write_csv(
+    format_dates(data_testing),
+    file = file_testing,
+    quote = FALSE,
+    na = "",
+    col_names = TRUE
+  )
+} else {
+  print("Error in data_testing.")
+}
 
-write_csv(
-  format_dates(data_recoveries),
-  file = file_recoveries,
-  quote = FALSE,
-  na = "",
-  col_names = TRUE
-)
-
-write_csv(
-  format_dates(data_testing),
-  file = file_testing,
-  quote = FALSE,
-  na = "",
-  col_names = TRUE
-)
 
 print("Update & push git...")
 # git add
