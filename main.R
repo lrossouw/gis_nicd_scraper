@@ -8,6 +8,7 @@ rm(list = ls())
 
 # fetch data
 source("fetch_data_covid_map4.R", echo = TRUE)
+source("fetch_data_nmclist.R", echo = TRUE)
 
 # repo
 repo_path <- "../covid19za/"
@@ -24,6 +25,9 @@ file_deaths <-
 file_recoveries <-
   paste0(repo_path,
          "data/covid19za_provincial_cumulative_timeline_recoveries.csv")
+file_testing <-
+  paste0(repo_path,
+         "data/covid19za_timeline_testing.csv")
 
 # get git tools
 source("git_tools.R")
@@ -99,6 +103,29 @@ data_recoveries <-
       )
   )
 
+data_testing <-
+  read_csv(
+    file_testing,
+    col_types = cols(
+      date = col_date(format = "%d-%m-%Y"),
+      YYYYMMDD = col_date(format = "%Y%m%d"),
+      cumulative_tests = col_integer(),
+      cumulative_tests_private = col_integer(),
+      cumulative_tests_public = col_integer(),
+      recovered = col_integer(),
+      hospitalisation = col_integer(),
+      critical_icu = col_integer(),
+      ventilation = col_integer(),
+      deaths = col_integer(),
+      contacts_identified = col_integer(),
+      contacts_traced = col_integer(),
+      scanned_travellers = col_integer(),
+      passengers_elevated_temperature = col_integer(),
+      covid_suspected_criteria = col_integer(),
+      source = col_character()
+    )
+  )
+
 # create province mapping
 province_map <- data.frame(
   code = c("EC", "FS", "GT", "KZN", "LIM", "MP", "NW", "NC", "WC"),
@@ -148,6 +175,22 @@ province_data <-
     source = "gis_nicd_scraper"
   )
 
+test_data <-
+  data.frame(type = tests_by_sector_json_data$series$name,
+             count = tests_by_sector_json_data$series$y) %>%
+  pivot_wider(names_from = "type", values_from = "count") %>%
+  mutate(date = tests_report_date,
+         YYYYMMDD = tests_report_date,) %>%
+  rename(cumulative_tests_private = Private,
+         cumulative_tests_public = Public) %>%
+  mutate(cumulative_tests = cumulative_tests_private + cumulative_tests_public,
+         source = "gis_nicd_scraper")
+
+if (report_date == tests_report_date) {
+  test_data$recovered = province_data %>% filter(type == "recoveries") %>% pull(total)
+  test_data$deaths = province_data %>% filter(type == "deaths") %>% pull(total)
+}
+
 data_cases <-
   data_cases %>%
   filter(date < report_date) %>%
@@ -163,12 +206,18 @@ data_recoveries <-
   filter(date < report_date) %>%
   bind_rows(province_data %>% filter(type == "recoveries") %>% select(-type))
 
+data_testing <-
+  data_testing %>%
+  filter(date < tests_report_date) %>%
+  bind_rows(test_data)
+
 source("data_checks.R", echo = TRUE)
 
 # run checks
 stopifnot(checks(data_cases))
 stopifnot(checks(data_deaths))
 stopifnot(checks(data_recoveries))
+stopifnot(checks_testing(data_testing))
 
 format_dates <- function(data) {
   return(data %>%
