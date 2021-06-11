@@ -255,6 +255,14 @@ write_csv(
   col_names = TRUE
 )
 
+write_csv(
+  format_dates(data_testing),
+  file = file_testing,
+  quote = FALSE,
+  na = "",
+  col_names = TRUE
+)
+
 print("Update & push git...")
 # git add
 git_add(repo_path,
