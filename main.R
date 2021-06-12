@@ -225,6 +225,30 @@ format_dates <- function(data) {
 # Pull latest changes on covid19za
 git_pull(repo_path, repo, repo_branch)
 
+
+# write output (if checks passed)
+if (checks(data_cases)) {
+  print("data_cases OK!")
+} else {
+  print("Error in data_cases.")
+}
+if (checks(data_deaths)) {
+  print("data_deaths OK!")
+} else {
+  print("Error in data_deaths.")
+}
+if (checks(data_recoveries)) {
+  print("data_recoveries OK!")
+} else {
+  print("Error in data_recoveries.")
+}
+
+if (checks_testing(data_testing)) {
+  print("data_testing OK")
+} else {
+  print("Error in data_testing.")
+}
+
 # write output (if checks passed)
 if (checks(data_cases)) {
   print("Write data_cases...")
@@ -235,8 +259,6 @@ if (checks(data_cases)) {
     na = "",
     col_names = TRUE
   )
-} else {
-  print("Error in data_cases.")
 }
 if (checks(data_deaths)) {
   print("Write data_deaths...")
@@ -247,8 +269,6 @@ if (checks(data_deaths)) {
     na = "",
     col_names = TRUE
   )
-} else {
-  print("Error in data_deaths.")
 }
 if (checks(data_recoveries)) {
   print("Write data_recoveries...")
@@ -259,8 +279,6 @@ if (checks(data_recoveries)) {
     na = "",
     col_names = TRUE
   )
-} else {
-  print("Error in data_recoveries.")
 }
 
 if (checks_testing(data_testing)) {
@@ -272,10 +290,7 @@ if (checks_testing(data_testing)) {
     na = "",
     col_names = TRUE
   )
-} else {
-  print("Error in data_testing.")
 }
-
 
 print("Update & push git...")
 # git add
