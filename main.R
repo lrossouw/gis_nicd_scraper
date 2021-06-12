@@ -180,7 +180,7 @@ test_data <-
              count = tests_by_sector_json_data$series$y) %>%
   pivot_wider(names_from = "type", values_from = "count") %>%
   mutate(date = tests_report_date,
-         YYYYMMDD = tests_report_date,) %>%
+         YYYYMMDD = tests_report_date, ) %>%
   rename(cumulative_tests_private = Private,
          cumulative_tests_public = Public) %>%
   mutate(cumulative_tests = cumulative_tests_private + cumulative_tests_public,
