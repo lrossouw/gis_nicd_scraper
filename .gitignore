@@ -40,3 +40,6 @@ vignettes/*.pdf
 
 # CSV files
 *.csv
+
+# log files
+*.log

@@ -1,0 +1,4 @@
+#!/bin/bash
+
+cd ~/source/gis_nicd_scraper
+Rscript --no-save --no-restore --verbose main.R > gis_nicd_scraper.log 2>&1
