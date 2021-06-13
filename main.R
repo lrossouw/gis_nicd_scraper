@@ -293,25 +293,46 @@ if (checks_testing(data_testing)) {
 }
 
 print("Update & push git...")
-# git add
+
+# git add data
 git_add(repo_path,
         "data/covid19za_provincial_cumulative_timeline_confirmed.csv")
 git_add(repo_path,
         "data/covid19za_provincial_cumulative_timeline_deaths.csv")
 git_add(repo_path,
         "data/covid19za_provincial_cumulative_timeline_recoveries.csv")
-git_add(repo_path,
-        "data/covid19za_timeline_testing.csv")
-git_add(repo_path,
-        "data/covid19za_timeline_vaccination.csv")
 
-# git commit
+# git commit data
 git_commit(repo_path,
            paste0(
              "Scrape & update cumulative provincial data for ",
              format(report_date, "%Y-%m-%d"),
              "."
            ))
+
+# git add testing data
+git_add(repo_path,
+        "data/covid19za_timeline_testing.csv")
+
+# git commit testing data
+git_commit(repo_path,
+           paste0(
+             "Scrape & update cumulative testing data for ",
+             format(tests_report_date, "%Y-%m-%d"),
+             "."
+           ))
+
+# # git add vaccine data
+# git_add(repo_path,
+#         "data/covid19za_timeline_vaccination.csv")
+# 
+# # git commit vaccine data
+# git_commit(repo_path,
+#            paste0(
+#              "Scrape & update cumulative provincial data for ",
+#              format(report_date, "%Y-%m-%d"),
+#              "."
+#            ))
 
 # Push changes
 git_push(repo_path, repo, repo_branch)
