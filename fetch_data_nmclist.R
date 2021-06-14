@@ -48,4 +48,4 @@ nmclist_date_time <-
 # if data is released before 18h00 it's probably the previous day's data
 nmclist_report_date <-
   as.Date(nmclist_date_time, tz = "Africa/Johannesburg") +
-  days(if_else(hour(nmclist_date_time) < 18,-1, 0))
+  days(if_else(hour(nmclist_date_time) < 18, -1, 0))
