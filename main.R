@@ -7,7 +7,7 @@ library(tidyverse)
 rm(list = ls())
 
 # fetch data
-source("fetch_data_covid_map4.R", echo = TRUE)
+source("fetch_data_covid_map.R", echo = TRUE)
 source("fetch_data_nmclist.R", echo = TRUE)
 
 # repo
