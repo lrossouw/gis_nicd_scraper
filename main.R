@@ -219,31 +219,41 @@ if (report_date == nmclist_report_date) {
 }
 
 if (nmclist_report_date > report_date) {
-  data_cases <-
-    data_cases %>%
-    filter(date < nmclist_report_date) %>%
-    bind_rows(province_nmclist_data)
+  if (max(data_deaths$date) <= nmclist_report_date) {
+    data_cases <-
+      data_cases %>%
+      filter(date < nmclist_report_date) %>%
+      bind_rows(province_nmclist_data)
+  }
 } else {
-  data_cases <-
-    data_cases %>%
-    filter(date < report_date) %>%
-    bind_rows(province_data %>% filter(type == "cases") %>% select(-type))
+  if (max(data_deaths$date) <= report_date) {
+    data_cases <-
+      data_cases %>%
+      filter(date < report_date) %>%
+      bind_rows(province_data %>% filter(type == "cases") %>% select(-type))
+  }
 }
 
-data_deaths <-
-  data_deaths %>%
-  filter(date < report_date) %>%
-  bind_rows(province_data %>% filter(type == "deaths") %>% select(-type))
+if (max(data_deaths$date) <= report_date) {
+  data_deaths <-
+    data_deaths %>%
+    filter(date < report_date) %>%
+    bind_rows(province_data %>% filter(type == "deaths") %>% select(-type))
+}
 
-data_recoveries <-
-  data_recoveries %>%
-  filter(date < report_date) %>%
-  bind_rows(province_data %>% filter(type == "recoveries") %>% select(-type))
+if (max(data_recoveries$date) <= report_date) {
+  data_recoveries <-
+    data_recoveries %>%
+    filter(date < report_date) %>%
+    bind_rows(province_data %>% filter(type == "recoveries") %>% select(-type))
+}
 
-data_testing <-
-  data_testing %>%
-  filter(date < nmclist_report_date) %>%
-  bind_rows(test_data)
+if (max(data_testing$date) <= report_date) {
+  data_testing <-
+    data_testing %>%
+    filter(date < nmclist_report_date) %>%
+    bind_rows(test_data)
+}
 
 source("data_checks.R", echo = TRUE)
 
