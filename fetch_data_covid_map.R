@@ -1,7 +1,7 @@
 # fetch data
 
 # pull data from json endpoints here:
-# https://gis.nicd.ac.za/server/rest/services/Covid_Map3/FeatureServer/
+# https://gis.nicd.ac.za/server/rest/services/Covid_Map4/FeatureServer/
 
 # libraries
 library(jsonlite)
@@ -26,7 +26,7 @@ get_json <- function(url, path = "", query = NULL) {
 
 # province data
 url = "https://gis.nicd.ac.za/"
-path = "server/rest/services/Covid_Map3/FeatureServer/0/query"
+path = "server/rest/services/Covid_Map4/FeatureServer/0/query"
 query = list(
   f = "json",
   where = "Positive > 0",
@@ -41,14 +41,14 @@ province_json_data <- get_json(url, path, query)
 
 # features
 url = "https://gis.nicd.ac.za/"
-path = "server/rest/services/Covid_Map3/FeatureServer/2"
+path = "server/rest/services/Covid_Map4/FeatureServer/2"
 query = list(f = "json")
 
 features_json_data <- get_json(url, path, query)
 
 # get statistics
 url = "https://gis.nicd.ac.za/"
-path = "server/rest/services/Covid_Map3/FeatureServer/2/query"
+path = "server/rest/services/Covid_Map4/FeatureServer/2/query"
 query = list(
   f = "json",
   where = "1=1",
