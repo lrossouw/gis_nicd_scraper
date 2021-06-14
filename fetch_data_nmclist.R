@@ -26,24 +26,26 @@ get_json <- function(url, path = "", query = NULL) {
 }
 
 # set v request parameter
-v=day(Sys.Date()) + month(Sys.Date()) + year(Sys.Date())
+v = day(Sys.Date()) + month(Sys.Date()) + year(Sys.Date())
 
-# province data
+# province case data
+url = "https://nmclist.nicd.ac.za/"
+path = "App_JSON/DashProvinceData.json"
+query = list(v = v)
+province_nmclist_json_data <- get_json(url, path, query)
+
+# testing data
 url = "https://nmclist.nicd.ac.za/"
 path = "App_JSON/DashDistributionTestsBySector.json"
-query = list(
-  v = v
-)
+query = list(v = v)
 tests_by_sector_json_data <- get_json(url, path, query)
 
-test_date_time <-
-  as.POSIXct(
-    tests_by_sector_json_data$start,
-    format = "%Y-%m-%d %H:%M:%S",
-    tz = "Africa/Johannesburg"
-  )
+nmclist_date_time <-
+  as.POSIXct(tests_by_sector_json_data$start,
+             format = "%Y-%m-%d %H:%M:%S",
+             tz = "Africa/Johannesburg")
 
 # if data is released before 18h00 it's probably the previous day's data
-tests_report_date <-
-  as.Date(test_date_time, tz = "Africa/Johannesburg") +
-  days(if_else(hour(test_date_time) < 18, -1, 0))
+nmclist_report_date <-
+  as.Date(nmclist_date_time, tz = "Africa/Johannesburg") +
+  days(if_else(hour(nmclist_date_time) < 18,-1, 0))
